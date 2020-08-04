@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sudoku App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- game settings -->
+    <h1>Sudoku</h1>
+    <div id="setup">
+      <div id="difficulty">
+        <h2>Choose Difficulty:</h2>
+        <input type="radio" id="Easy" name="difficulty" />
+        <label for="Easy">Easy</label>
+        <input type="radio" id="Medium" name="difficulty" checked />
+        <label for="Medium">Medium</label>
+        <input type="radio" id="Hard" name="difficulty" />
+        <label for="Hard">Hard</label>
+      </div>
+      <div id="time">
+        <h2>Choose Time:</h2>
+        <input type="radio" id="3 Min" name="time" />
+        <label for="3 Min">3 Min</label>
+        <input type="radio" id="5 Min" name="time" checked />
+        <label for="5 Min">5 Min</label>
+        <input type="radio" id="10 Min" name="time" />
+        <label for="10 Min">10 Min</label>
+      </div>
+      <div id="theme">
+        <h2>Choose Theme:</h2>
+        <input type="radio" id="Light" name="theme" checked />
+        <label for="Light">Light</label>
+        <input type="radio" id="Dark" name="theme" />
+        <label for="Dark">Dark</label>
+      </div>
+      <button id="start-btn">New Game!</button>
+    </div>
+
+    <!-- game info -->
+    <div class="stats">
+      <p id="timer"></p>
+      <p id="lives"></p>
+    </div>
+
+    <!-- game area -->
+    <div id="game">
+      <div id="board"></div>
+      <div id="number-container" class="hidden">
+        <p id="one">1</p>
+        <p id="two">2</p>
+        <p id="three">3</p>
+        <p id="four">4</p>
+        <p id="five">5</p>
+        <p id="six">6</p>
+        <p id="seven">7</p>
+        <p id="eight">8</p>
+        <p id="nine">9</p>
+      </div>
+    </div>
+  </body>
+  <script src="app.js"></script>
+</html>
