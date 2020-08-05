@@ -22,17 +22,24 @@ h1 {
 #setup > * {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   padding-left: 50px;
   padding-right: 50px;
   margin-bottom: 10px;
 }
 
-#start-btn {
+#buttons {
+  display: block;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+button {
   background: rgb(96, 84, 202);
   color: rgb(236, 241, 238);
-  margin-left: 30%;
-  margin-right: 30%;
-  padding: 10px;
+  height: 40px;
+  width: 130px;
+  font-size: medium;
 }
 
 #timer,
@@ -57,9 +64,10 @@ h1 {
   margin-top: 5px;
   margin-bottom: 5px;
   text-align: center;
+  cursor: pointer;
 }
 
-#border {
+#board {
   padding-top: 10px;
   margin-top: 10px;
   display: flex;
@@ -71,13 +79,20 @@ h1 {
 }
 
 .tile {
-  border: 1px solid black;
+  border: 1px solid rgb(238, 226, 52);
   width: 60px;
   height: 60px;
   text-align: center;
   margin: 0px;
   vertical-align: middle;
   font-size: 40pt;
+  padding: 0;
+  cursor: pointer;
+}
+.fixed {
+  background: rgb(111, 112, 109);
+  color: white;
+  cursor: not-allowed;
 }
 
 .selected {
@@ -87,11 +102,14 @@ h1 {
 .incorrect {
   color: red;
 }
+.correct {
+  color: green;
+}
 
 .rightBorder {
-  border-right: 4px solid black;
+  border-right: 4px solid yellow;
 }
 
 .bottomBorder {
-  border-bottom: 4px solid black;
+  border-bottom: 4px solid yellow;
 }

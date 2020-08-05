@@ -1,145 +1,164 @@
-const board = [
-  [3, 1, 6, 5, -1, 8, 4, -1, -1],
-  [5, 2, -1, -1, -1, 4, -1, -1, -1],
-  [-1, 8, 7, -1, -1, -1, -1, 3, 1],
-  [-1, -1, 3, -1, 1, -1, -1, 8, -1],
-  [9, -1, -1, 8, 6, 3, -1, -1, 5],
-  [-1, 5, -1, -1, 9, -1, 6, -1, -1],
-  [1, 3, -1, -1, -1, -1, 2, 5, -1],
-  [-1, -1, -1, -1, -1, -1, -1, 7, 4],
-  [7, -1, 5, 2, -1, 6, 3, -1, 9],
-];
-//solve a board
-const solveSudoku = (board) => {
-  //get pssible valid options for a tile
-  const validOptions = (row, col) => {
-    const options = [1, 1, 1, 1, 1, 1, 1, 1, 1]; //length 9
+import { solveSudoku, generator } from "./algo.js";
 
-    //check row
-    for (let c = 0; c < 9; c++) {
-      if (board[row][c] != -1) {
-        options[board[row][c] - 1] = 0;
-      }
-    }
-    //check col
-    for (let r = 0; r < 9; r++) {
-      if (board[r][col] != -1) {
-        options[board[r][col] - 1] = 0;
-      }
-    }
+let board;
 
-    //check 3 x 3 grid
-    let row_start = Math.floor(row / 3) * 3;
-    let col_start = Math.floor(col / 3) * 3;
-    for (let r = row_start; r < row_start + 3; r++) {
-      for (let c = col_start; c < col_start + 3; c++) {
-        if (board[r][c] != -1) {
-          options[board[r][c] - 1] = 0;
+let timer, timeRemaining, selectedNum, selectedTile, disableSelect;
+
+window.onload = function () {
+  id("start-btn").addEventListener("click", startGame);
+  id("solve-btn").addEventListener("click", solveGame);
+  for (let i = 0; i < id("number-container").children.length; i++) {
+    id("number-container").children[i].addEventListener("click", function () {
+      if (!disableSelect) {
+        if (this.classList.contains("selected")) {
+          this.classList.remove("selected");
+          selectedNum = null;
+        } else {
+          for (let i = 0; i < 9; i++) {
+            id("number-container").children[i].classList.remove("selected");
+          }
+          this.classList.add("selected");
+          selectedNum = this;
+          updateMove();
         }
       }
-    }
+    });
+  }
+};
 
-    //turn into num array
-    let nums = [];
-    for (let i = 0; i < 9; i++) {
-      if (options[i] === 1) {
-        nums.push(i + 1);
-      }
-    }
-    return nums;
-  };
+function id(id) {
+  return document.getElementById(id);
+}
+function qs(selector) {
+  return document.querySelector(selector);
+}
+function qsa(selector) {
+  return document.querySelectorAll(selector);
+}
 
-  //solve one choice tiles ie tiles with one valid choice without recusion
-  const solveOneValid = (row = 0, col = 0) => {
-    //continuesly loop and check for one choice tiles till no more change possible
-    let didChange = true;
-    while (didChange) {
-      didChange = false;
-      for (let r = 0; r < 9; r++) {
-        for (let c = 0; c < 9; c++) {
-          if (board[r][c] != -1) {
-            continue;
-          }
-          let nums = validOptions(r, c);
-          if (nums.length === 1) {
-            board[r][c] = nums[0];
-            didChange = true;
+function startGame() {
+  const timeToGenerate = id("Easy").checked
+    ? 300
+    : id("Medium").checked
+    ? 800
+    : 2000;
+  board = generator(timeToGenerate);
+  disableSelect = false;
+  generateBoard(board);
+  startTimer();
+  if (id("Light").checked) {
+    qs("body").classList.remove("dark");
+  } else {
+    qs("body").classList.add("dark");
+  }
+  id("number-container").classList.toggle("hidden");
+  id("solve-btn").classList.toggle("hidden");
+}
+
+function solveGame() {
+  let solution = solveSudoku(board);
+  let tile = document.createElement("p");
+
+  for (let i = 0; i < 81; i++) {
+    if (!id(i).classList.contains("fixed")) {
+      id(i).textContent ==
+      solution[Math.floor(i / 9)][i - Math.floor(i / 9) * 9]
+        ? id(i).classList.add("correct")
+        : id(i).classList.add("incorrect");
+      id(i).textContent =
+        solution[Math.floor(i / 9)][i - Math.floor(i / 9) * 9];
+    }
+  }
+  id("solve-btn").classList.toggle("hidden");
+
+  endGame();
+}
+
+function startTimer() {
+  if (id("3 Min").checked) timeRemaining = 180;
+  else if (id("5 Min").checked) timeRemaining = 300;
+  else if (id("Unlimited").checked) timeRemaining = 9999999;
+  else timeRemaining = 600;
+  id("timer").textContent = timeConversion(timeRemaining);
+  timer = setInterval(function () {
+    timeRemaining--;
+    if (timeRemaining === 0) endGame();
+    id("timer").textContent = timeConversion(timeRemaining);
+  }, 1000);
+}
+
+function timeConversion(time) {
+  let min = Math.floor(time / 60);
+  if (min < 10) min = "0" + min;
+  let sec = time % 60;
+  if (sec < 10) sec = "0" + sec;
+  return min + ":" + sec;
+}
+
+function generateBoard(board) {
+  clearPrevios();
+
+  let idCount = 0;
+  for (let i = 0; i < 81; i++) {
+    let tile = document.createElement("p");
+    if (board[Math.floor(i / 9)][i - Math.floor(i / 9) * 9] != -1) {
+      tile.textContent = board[Math.floor(i / 9)][i - Math.floor(i / 9) * 9];
+      tile.classList.add("fixed");
+    } else {
+      tile.addEventListener("click", function () {
+        if (!disableSelect) {
+          if (tile.classList.contains("selected")) {
+            tile.classList.remove("selected");
+            selectedTile = null;
+          } else {
+            for (let i = 0; i < 81; i++) {
+              qsa(".tile")[i].classList.remove("selected");
+            }
+            tile.classList.add("selected");
+            selectedTile = tile;
+            updateMove();
           }
         }
-      }
+      });
     }
-  };
-
-  //solve using backtracking
-  const solveBacktrack = (row = 0, col = 0) => {
-    if (row === 9) {
-      return true;
+    tile.id = idCount;
+    idCount++;
+    tile.classList.add("tile");
+    if ((tile.id > 17 && tile.id < 27) || (tile.id > 44 && tile.id < 54)) {
+      tile.classList.add("bottomBorder");
     }
-    if (board[row][col] != -1) {
-      return solveBacktrack(
-        row + (col === 8 ? 1 : 0),
-        col + (col === 8 ? -8 : 1)
-      );
+    if ((tile.id + 1) % 9 === 3 || (tile.id + 1) % 9 === 6) {
+      tile.classList.add("rightBorder");
     }
-
-    const nums = validOptions(row, col);
-
-    //backtreckking
-    while (nums.length) {
-      let i = Math.floor(Math.random() * nums.length);
-      board[row][col] = nums[i];
-      if (
-        solveBacktrack(
-          row + (col === 8 ? 1 : 0),
-          col + (col === 8 ? -8 : 1)
-        ) === true
-      ) {
-        return true;
-      }
-      nums[i] = nums[nums.length - 1];
-      nums.pop();
-    }
-
-    board[row][col] = -1;
-  };
-
-  solveOneValid();
-  solveBacktrack();
-};
-
-console.time();
-solveSudoku(board);
-console.log(board);
-console.timeEnd();
-//generate new puzzle
-const generator = () => {
-  //empty board
-  let board = [];
-  for (let i = 0; i < 9; i++) {
-    board.push([]);
-    for (let j = 0; j < 9; j++) {
-      board[board.length - 1].push(-1);
-    }
+    id("board").appendChild(tile);
   }
-  //fill diagonal 3x3 squares
-  let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  for (let r = 0; r < 9; r++) {
-    let x = Math.floor(r / 3) * 3;
-    for (let c = x; c < x + 3; c++) {
-      let i = Math.floor(Math.random() * nums.length);
-      board[r][c] = nums[i];
-      nums[i] = nums[nums.length - 1];
-      nums.pop();
-      if (nums.length === 0) {
-        nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      }
-    }
+}
+
+function updateMove() {
+  if (selectedTile && selectedNum) {
+    selectedTile.textContent = selectedNum.textContent;
+    selectedTile.classList.remove("selected");
+    selectedNum.classList.remove("selected");
+    selectedNum = null;
+    selectedTile = null;
   }
+}
 
-  //solve to get full board
+function endGame() {
+  disableSelect = true;
+  clearInterval(timer);
+}
 
-  solveSudoku(board);
-  return board;
-};
+function clearPrevios() {
+  let tiles = qsa(".tile");
+  for (let i = 0; i < tiles.length; i++) {
+    tiles[i].remove();
+  }
+  if (timer) clearTimeout(timer);
 
-// console.log(generator());
+  for (let i = 0; i < id("number-container").children.length; i++) {
+    id("number-container").children[i].classList.remove("selected");
+  }
+  selectedNum = null;
+  selectedTile = null;
+}

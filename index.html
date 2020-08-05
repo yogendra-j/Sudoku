@@ -27,6 +27,8 @@
         <label for="5 Min">5 Min</label>
         <input type="radio" id="10 Min" name="time" />
         <label for="10 Min">10 Min</label>
+        <input type="radio" id="Unlimited" name="time" />
+        <label for="Unlimited">Unlimited!!</label>
       </div>
       <div id="theme">
         <h2>Choose Theme:</h2>
@@ -35,7 +37,10 @@
         <input type="radio" id="Dark" name="theme" />
         <label for="Dark">Dark</label>
       </div>
-      <button id="start-btn">New Game!</button>
+      <div id="buttons">
+        <button id="start-btn">New Game!</button>
+        <button id="solve-btn" class="hidden">See Solution :(</button>
+      </div>
     </div>
 
     <!-- game info -->
@@ -60,5 +65,5 @@
       </div>
     </div>
   </body>
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </html>
