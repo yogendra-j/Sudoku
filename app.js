@@ -66,12 +66,10 @@ function solveGame() {
 
   for (let i = 0; i < 81; i++) {
     if (!id(i).classList.contains("fixed")) {
-      id(i).textContent ==
-      solution[Math.floor(i / 9)][i - Math.floor(i / 9) * 9]
+      id(i).value == solution[Math.floor(i / 9)][i - Math.floor(i / 9) * 9]
         ? id(i).classList.add("correct")
         : id(i).classList.add("incorrect");
-      id(i).textContent =
-        solution[Math.floor(i / 9)][i - Math.floor(i / 9) * 9];
+      id(i).value = solution[Math.floor(i / 9)][i - Math.floor(i / 9) * 9];
     }
   }
   id("solve-btn").classList.remove("hidden");
@@ -87,7 +85,7 @@ function startTimer() {
   id("timer").textContent = timeConversion(timeRemaining);
   timer = setInterval(function () {
     timeRemaining--;
-    if (timeRemaining === 0) endGame();
+    if (timeRemaining === 0) solveGame();
     id("timer").textContent = timeConversion(timeRemaining);
   }, 1000);
 }
@@ -105,9 +103,10 @@ function generateBoard(board) {
 
   let idCount = 0;
   for (let i = 0; i < 81; i++) {
-    let tile = document.createElement("p");
+    let tile = document.createElement("input");
     if (board[Math.floor(i / 9)][i - Math.floor(i / 9) * 9] != -1) {
-      tile.textContent = board[Math.floor(i / 9)][i - Math.floor(i / 9) * 9];
+      tile.value = board[Math.floor(i / 9)][i - Math.floor(i / 9) * 9];
+      tile.disabled = true;
       tile.classList.add("fixed");
     } else {
       tile.addEventListener("click", function () {
