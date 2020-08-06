@@ -140,7 +140,7 @@ function generateBoard(board) {
 
 function updateMove() {
   if (selectedTile && selectedNum) {
-    selectedTile.textContent = selectedNum.textContent;
+    selectedTile.value = selectedNum.textContent;
     selectedTile.classList.remove("selected");
     selectedNum.classList.remove("selected");
     selectedNum = null;
