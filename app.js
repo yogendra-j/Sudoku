@@ -38,10 +38,11 @@ function qsa(selector) {
 
 function startGame() {
   const timeToGenerate = id("Easy").checked
-    ? 300
+    ? 3
     : id("Medium").checked
     ? 800
     : 2000;
+
   board = generator(timeToGenerate);
   disableSelect = false;
   generateBoard(board);
@@ -51,13 +52,17 @@ function startGame() {
   } else {
     qs("body").classList.add("dark");
   }
-  id("number-container").classList.toggle("hidden");
-  id("solve-btn").classList.toggle("hidden");
+  //show solution and number-container after game starts
+  id("number-container").classList.remove("hidden");
+  id("solve-btn").classList.remove("hidden");
+  //hide game options after games starts
+  id("difficulty").classList.add("hidden");
+  id("theme").classList.add("hidden");
+  id("time").classList.add("hidden");
 }
 
 function solveGame() {
   let solution = solveSudoku(board);
-  let tile = document.createElement("p");
 
   for (let i = 0; i < 81; i++) {
     if (!id(i).classList.contains("fixed")) {
@@ -69,7 +74,7 @@ function solveGame() {
         solution[Math.floor(i / 9)][i - Math.floor(i / 9) * 9];
     }
   }
-  id("solve-btn").classList.toggle("hidden");
+  id("solve-btn").classList.remove("hidden");
 
   endGame();
 }
@@ -146,6 +151,11 @@ function updateMove() {
 
 function endGame() {
   disableSelect = true;
+  //show elements again
+  id("number-container").classList.remove("hidden");
+  id("difficulty").classList.remove("hidden");
+  id("theme").classList.remove("hidden");
+  id("time").classList.remove("hidden");
   clearInterval(timer);
 }
 

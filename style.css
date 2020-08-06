@@ -1,7 +1,3 @@
-.hidden {
-  display: none;
-}
-
 .dark {
   background: rgb(27, 36, 36);
   color: rgb(246, 250, 253);
@@ -10,29 +6,31 @@
 h1 {
   font-size: 2.5rem;
   text-align: center;
+  color: darkgoldenrod;
 }
 
 #setup {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
   padding-bottom: 10px;
   border-bottom: 1px solid rgb(147, 207, 50);
+  background: grey;
 }
-#setup > * {
+.setup {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
-  padding-left: 50px;
-  padding-right: 50px;
+  justify-content: center;
+  /* padding-left: 50px;
+  padding-right: 50px; */
   margin-bottom: 10px;
+  background: green;
 }
 
-#buttons {
+/* #buttons {
   display: block;
   margin-left: 10%;
   margin-right: 10%;
-}
+} */
 
 button {
   background: rgb(96, 84, 202);
@@ -51,6 +49,7 @@ button {
 
 #game {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -65,23 +64,20 @@ button {
   margin-bottom: 5px;
   text-align: center;
   cursor: pointer;
+  background: rgb(121, 6, 96);
 }
 
 #board {
   padding-top: 10px;
   margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(30px, auto));
   width: 600px;
   height: 600px;
 }
 
 .tile {
   border: 1px solid rgb(238, 226, 52);
-  width: 60px;
-  height: 60px;
   text-align: center;
   margin: 0px;
   vertical-align: middle;
@@ -112,4 +108,70 @@ button {
 
 .bottomBorder {
   border-bottom: 4px solid yellow;
+}
+.hidden {
+  display: none;
+}
+
+@media only screen and (max-width: 750px) {
+  .flex {
+    display: flex;
+  }
+  #board {
+    width: 400px;
+    height: 400px;
+  }
+  .tile {
+    width: 44.44px;
+    height: 44.44px;
+    font-size: 30pt;
+  }
+  #number-container {
+    /* display: flex; */
+    margin-top: 28px;
+  }
+  #number-container > p {
+    border-radius: 20%;
+    width: 40px;
+    height: 44.44px;
+    font-size: 30pt;
+    margin-left: 2.5px;
+    margin-bottom: 2.5px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .hidden {
+    display: none;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .flex {
+    display: flex;
+  }
+  #board {
+    width: 300px;
+    height: 300px;
+  }
+  .tile {
+    width: 33.33px;
+    height: 33.33px;
+    font-size: 22pt;
+  }
+  #number-container {
+    /* display: flex; */
+    margin-top: 28px;
+  }
+  #number-container > p {
+    border-radius: 20%;
+    width: 30px;
+    height: 33px;
+    font-size: 22pt;
+    margin-left: 2.5px;
+    margin-bottom: 2.5px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .hidden {
+    display: none;
+  }
 }
